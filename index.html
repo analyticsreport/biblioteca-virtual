@@ -646,28 +646,28 @@
             const c = row.c;
             if (!c) return;
 
-            // MAPEO DE COLUMNAS DE GOOGLE SHEETS:
-            // c[0] = Columna A (N° correlativo -> se ignora)
-            // c[1] = Columna B (Nombre / Título del Libro)
-            // c[2] = Columna C (Código / Clasificación)
+            // MAPEO EXACTO DE COLUMNAS DE TU HOJA:
+            // c[0] = Columna A (N° correlativo)
+            // c[1] = Columna B (Código / Clasificación)  -> ej. "331.31 O37"
+            // c[2] = Columna C (Nombre / Título del Libro) -> ej. "Trabajo infantil..."
             // c[3] = Columna D (Estante / Repisa)
             
-            const valNombre = (c[1] && c[1].v !== null) ? String(c[1].v).trim() : '';
-            const valCodigo = (c[2] && c[2].v !== null) ? String(c[2].v).trim() : '';
+            const valCodigo = (c[1] && c[1].v !== null) ? String(c[1].v).trim() : '';
+            const valNombre = (c[2] && c[2].v !== null) ? String(c[2].v).trim() : '';
             
             let valEstante = '1';
             if (c[3] && c[3].v !== null) {
               valEstante = String(c[3].v).trim();
-            } else if (c[2] && c[2].v !== null && !isNaN(c[2].v)) {
-              valEstante = String(c[2].v).trim();
             }
 
-            // Ignorar encabezados
+            // Filtrar filas de encabezado o vacías
             if (!valNombre || 
                 valNombre.toLowerCase() === 'nombre' || 
                 valNombre.toLowerCase() === 'título' || 
                 valNombre.toLowerCase() === 'titulo' ||
-                valNombre.toLowerCase() === 'n°') {
+                valNombre.toLowerCase() === 'n°' ||
+                valCodigo.toLowerCase() === 'código' ||
+                valCodigo.toLowerCase() === 'codigo') {
               return;
             }
 
