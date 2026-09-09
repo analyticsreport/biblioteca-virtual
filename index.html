@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Virtual - Sineace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --sineace-blue: #0082c8;
+      --sineace-dark-blue: #005ca9;
+      --sineace-lime: #c8d400;
+      --sineace-gray-bg: #f8fafc;
+      --sineace-footer-bg: #005ca9;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--sineace-gray-bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .top-color-bar {
+      height: 5px;
+      background: linear-gradient(90deg, #e30613 0%, #e2ac00 33%, #0082c8 66%, #005ca9 100%);
+      width: 100%;
+    }
+
+    /* ENCABEZADO */
+    .navbar-sineace {
+      background: #ffffff;
+      padding: 18px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-divider {
+      width: 2px;
+      height: 42px;
+      background-color: #cbd5e1;
+    }
+
+    .brand-fullname {
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      max-width: 250px;
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .direction-badge {
+      background: #f0f9ff;
+      border-left: 5px solid var(--sineace-blue);
+      padding: 10px 18px;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .direction-badge h2 {
+      margin: 0;
+      font-size: 15px;
+      color: var(--sineace-dark-blue);
+      font-weight: 800;
+    }
+
+    .direction-badge p {
+      margin: 3px 0 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #005ca9 0%, #0082c8 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 35px 20px;
+      margin-bottom: 30px;
+    }
+
+    .hero-pill {
+      background-color: var(--sineace-lime);
+      color: #0f172a;
+      display: inline-block;
+      padding: 10px 28px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .hero-sub {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+
+    .main-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 25px;
+    }
+
+    .search-filter-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 35px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 420px;
+      min-width: 280px;
+      padding: 13px 22px;
+      border-radius: 30px;
+      border: 2px solid #e2e8f0;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+      background: #ffffff;
+    }
+
+    .shelf-select-filter {
+      padding: 13px 20px;
+      border-radius: 30px;
+      border: 2px solid #e2e8f0;
+      background: #ffffff;
+      color: #334155;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .search-box:focus, .shelf-select-filter:focus {
+      border-color: var(--sineace-blue);
+      box-shadow: 0 4px 15px rgba(0, 130, 200, 0.15);
+    }
+
+    /* ESTANTERÍA */
+    .bookshelf-unit {
+      background: #23160c;
+      border: 14px solid #362213;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      margin-bottom: 50px;
+      padding: 20px;
+    }
+
+    .shelf-title {
+      background: #362213;
+      color: var(--sineace-lime);
+      padding: 8px 18px;
+      font-weight: 800;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: inline-block;
+      font-size: 15px;
+    }
+
+    .shelf-row {
+      background: #140c07;
+      border-bottom: 16px solid #4a2e19;
+      box-shadow: inset 0 -8px 12px rgba(0,0,0,0.6);
+      min-height: 190px;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 20px;
+      gap: 6px;
+      overflow-x: auto;
+      margin-bottom: 25px;
+    }
+
+    .book-spine {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      padding: 12px 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      border-radius: 4px 4px 0 0;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s;
+      box-shadow: -3px 0 8px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-spine:hover {
+      transform: translateY(-10px) scale(1.03);
+      z-index: 10;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    }
+
+    .c1 { background: #991b1b; }
+    .c2 { background: #075985; }
+    .c3 { background: #166534; }
+    .c4 { background: #d97706; color: #ffffff; }
+    .c5 { background: #6b21a8; }
+
+    /* TARJETA DETALLE */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(3px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.88); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      background: var(--sineace-dark-blue);
+      color: #ffffff;
+      padding: 18px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 { margin: 0; font-size: 17px; }
+
+    .modal-body { padding: 24px; }
+
+    .card-detail-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card-label {
+      font-weight: 800;
+      color: var(--sineace-dark-blue);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+    }
+
+    .card-value {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    /* BOTÓN FLOTANTE */
+    .floating-widget-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: var(--sineace-dark-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 22px 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0, 92, 169, 0.4);
+      z-index: 99;
+      transition: all 0.3s ease;
+    }
+
+    .floating-widget-btn:hover {
+      background: var(--sineace-blue);
+      transform: scale(1.05);
+    }
+
+    .widget-icon {
+      width: 36px;
+      height: 36px;
+      background: #ffffff;
+      color: var(--sineace-dark-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* PANEL LATERAL FORMULARIO */
+    .side-panel {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 90vw;
+      height: 100%;
+      background: #ffffff;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: right 0.35s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-panel.open { right: 0; }
+
+    .panel-header {
+      background: var(--sineace-dark-blue);
+      color: #ffffff;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-header h3 { margin: 0; font-size: 17px; }
+
+    .close-panel-btn {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .panel-body { padding: 22px; overflow-y: auto; flex: 1; }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .btn-submit {
+      background: var(--sineace-blue);
+      color: #ffffff;
+      border: none;
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover { background: var(--sineace-dark-blue); }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      display: none;
+      z-index: 999;
+    }
+
+    .overlay.show { display: block; }
+
+    .sineace-footer {
+      background-color: var(--sineace-footer-bg);
+      color: #ffffff;
+      padding: 45px 25px 0 25px;
+      margin-top: 60px;
+    }
+
+    .footer-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 35px;
+      padding-bottom: 35px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      background: #ffffff;
+      color: #64748b;
+      margin: 0 -25px;
+      padding: 18px 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-color-bar"></div>
+
+  <header class="navbar-sineace">
+    <div class="brand-container">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="52" height="44" viewBox="0 0 90 80" fill="none">
+          <path d="M 12 28 C 26 14, 52 10, 66 18 C 42 25, 24 34, 12 28 Z" fill="#E30613"/>
+          <path d="M 18 20 C 30 8, 58 2, 70 8 C 46 17, 28 26, 18 20 Z" fill="#E2AC00"/>
+          <path d="M 6 38 C 18 26, 44 20, 56 28 C 36 34, 18 40, 6 38 Z" fill="#005CA9"/>
+          <path d="M 48 30 L 72 14" stroke="#707173" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 12 54 C 26 58, 44 42, 52 24" stroke="#707173" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M 20 62 C 32 62, 44 48, 50 30" stroke="#707173" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span style="font-size: 32px; font-weight: 800; color: #0082c8; letter-spacing: -0.8px;">Sineace</span>
+      </div>
+      <div class="brand-divider"></div>
+      <div class="brand-fullname">
+        SISTEMA NACIONAL DE EVALUACIÓN,<br>
+        ACREDITACIÓN Y CERTIFICACIÓN<br>
+        DE LA CALIDAD EDUCATIVA
+      </div>
+    </div>
+
+    <div class="direction-badge">
+      <h2>Dirección de Estudios y Relacionamiento Institucional</h2>
+      <p>SINEACE - Perú</p>
+    </div>
+  </header>
+
+  <section class="hero-banner">
+    <div class="hero-pill">Biblioteca Virtual</div>
+    <p class="hero-sub">3er Piso — Catálogo e inventario de estanterías físicas</p>
+  </section>
+
+  <main class="main-container">
+    <div class="search-filter-container">
+      <input type="text" id="searchInput" class="search-box" placeholder="🔍 Buscar libro por título o código..." oninput="aplicarFiltros()">
+      <select id="selectFiltroEstante" class="shelf-select-filter" onchange="aplicarFiltros()">
+        <option value="todos">📚 Todos los Estantes</option>
+      </select>
+    </div>
+
+    <div id="bookshelfContainer">
+      <p style="text-align:center; color:#64748b; font-size:16px;">⏳ Cargando catálogo desde Google Sheets...</p>
+    </div>
+  </main>
+
+  <button class="floating-widget-btn" onclick="togglePanel(true)">
+    <div class="widget-icon">📚</div>
+    <span>Solicitar Libro</span>
+  </button>
+
+  <div class="modal-overlay" id="modalDetalle" onclick="cerrarTarjeta()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3>📗 Información del Libro</h3>
+        <button class="close-panel-btn" onclick="cerrarTarjeta()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="card-detail-box">
+          <div class="card-label">Título del Libro</div>
+          <div class="card-value" id="detNombre">-</div>
+        </div>
+        <div class="card-detail-box">
+          <div class="card-label">Código / Clasificación</div>
+          <div class="card-value" id="detCodigo">-</div>
+        </div>
+        <div class="card-detail-box">
+          <div class="card-label">Ubicación Física</div>
+          <div class="card-value" id="detEstante">-</div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="cerrarTarjeta()">Cerrar</button>
+          <button class="btn-submit" onclick="solicitarDesdeTarjeta()">📚 Solicitar Préstamo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="togglePanel(false)"></div>
+
+  <aside class="side-panel" id="sidePanel">
+    <div class="panel-header">
+      <h3>📋 Solicitud de Préstamo</h3>
+      <button class="close-panel-btn" onclick="togglePanel(false)">&times;</button>
+    </div>
+
+    <div class="panel-body">
+      <form id="loanForm" onsubmit="enviarSolicitudMailto(event)">
+        <div class="form-group">
+          <label>Selecciona el Libro *</label>
+          <select id="selectLibro" required>
+            <option value="">Cargando libros...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nombres y Apellidos del Trabajador *</label>
+          <input type="text" id="fNombre" required placeholder="Ej. Juan Pérez">
+        </div>
+
+        <div class="form-group">
+          <label>Correo Institucional *</label>
+          <input type="email" id="fCorreo" required placeholder="usuario@sineace.gob.pe">
+        </div>
+
+        <div class="form-group">
+          <label>Área / Dirección *</label>
+          <input type="text" id="fArea" required placeholder="Ej. Dirección de Estudios">
+        </div>
+
+        <div class="form-group">
+          <label>Días de Préstamo requeridos *</label>
+          <select id="fDias" required>
+            <option value="3">3 Días</option>
+            <option value="5">5 Días</option>
+            <option value="7" selected>7 Días (1 Semana)</option>
+            <option value="15">15 Días</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSubmit">📤 Generar Solicitud de Correo</button>
+      </form>
+
+      <div id="statusMsg" style="text-align:center; margin-top: 15px; font-weight: 700;"></div>
+    </div>
+  </aside>
+
+  <footer class="sineace-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3 style="margin-top:0; color:#fff; font-size:22px; font-weight:800;">Sineace</h3>
+        <p><strong>Sineace en línea</strong> facilita la difusión de información y acceso a trámites institucionales.</p>
+      </div>
+      <div class="footer-col">
+        <h4 style="margin-top:0;">Ubícanos</h4>
+        <p>📍 Av. República de Panamá n° 3659, San Isidro</p>
+        <p>🌐 gob.pe/sineace</p>
+        <p>✉️ consultas@sineace.gob.pe</p>
+      </div>
+      <div class="footer-col">
+        <h4 style="margin-top:0;">Mesa de Partes</h4>
+        <p><strong>Presencial:</strong> Lunes a Viernes de 8:30 a 16:30 hrs</p>
+        <p><strong>Virtual:</strong> Atención 24 horas</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      2026 © Todos los derechos reservados
+    </div>
+  </footer>
+
+  <script>
+    const SPREADSHEET_ID = '13UlXcSg60-Sjib3KLsP0p2s1U1b7Af7Dy7H11FkF-WE';
+    const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+
+    let todosLosLibros = [];
+    let librosFiltradosActuales = [];
+    let libroSeleccionadoParaPrestamo = '';
+    const colores = ['c1', 'c2', 'c3', 'c4', 'c5'];
+
+    window.onload = function() {
+      cargarLibrosDesdeSheets();
+    };
+
+    function cargarLibrosDesdeSheets() {
+      fetch(GVIZ_URL)
+        .then(res => res.text())
+        .then(text => {
+          const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+          const json = JSON.parse(jsonString);
+          const rows = json.table.rows;
+
+          const libros = [];
+          rows.forEach((row, index) => {
+            const c = row.c;
+            if (!c || !c[0] || c[0].v === null) return;
+
+            const valCol0 = String(c[0].v).trim();
+            
+            if (index === 0 && (
+              valCol0.toLowerCase().includes('título') || 
+              valCol0.toLowerCase().includes('titulo') || 
+              valCol0.toLowerCase().includes('nombre') || 
+              valCol0.toLowerCase().includes('libro')
+            )) {
+              return;
+            }
+
+            libros.push({
+              nombre: valCol0,
+              codigo: (c[1] && c[1].v !== null) ? String(c[1].v) : '',
+              estante: (c[2] && c[2].v !== null) ? String(c[2].v) : '1'
+            });
+          });
+
+          inicializarBiblioteca(libros);
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('bookshelfContainer').innerHTML = 
+            '<p style="text-align:center; color:#991b1b; padding:20px; font-weight:bold;">Error al conectar con Google Sheets.<br>Asegúrate de que la hoja esté compartida como "Cualquier persona con el enlace (Lector)".</p>';
+        });
+    }
+
+    function inicializarBiblioteca(libros) {
+      todosLosLibros = libros || [];
+      librosFiltradosActuales = [...todosLosLibros];
+
+      const select = document.getElementById('selectLibro');
+      select.innerHTML = '<option value="">-- Selecciona un libro --</option>';
+      todosLosLibros.forEach(l => {
+        const option = document.createElement('option');
+        option.value = l.nombre;
+        option.textContent = `${l.nombre} (Estante ${l.estante})`;
+        select.appendChild(option);
+      });
+
+      const estantes = [...new Set(todosLosLibros.map(l => l.estante))].sort((a,b) => {
+        return isNaN(a) || isNaN(b) ? String(a).localeCompare(String(b)) : a - b;
+      });
+      
+      const selectFiltro = document.getElementById('selectFiltroEstante');
+      selectFiltro.innerHTML = '<option value="todos">📚 Todos los Estantes</option>';
+      estantes.forEach(e => {
+        const option = document.createElement('option');
+        option.value = e;
+        option.textContent = `Estante ${e}`;
+        selectFiltro.appendChild(option);
+      });
+
+      dibujarEstantes(todosLosLibros);
+    }
+
+    function dibujarEstantes(libros) {
+      const container = document.getElementById('bookshelfContainer');
+      container.innerHTML = '';
+
+      if(!libros || libros.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:40px; color:#64748b; font-size:16px;">No se encontraron libros que coincidan con la búsqueda.</p>';
+        return;
+      }
+
+      const agrupados = {};
+      libros.forEach((l, globalIdx) => {
+        if(!agrupados[l.estante]) agrupados[l.estante] = [];
+        agrupados[l.estante].push({ ...l, pos: globalIdx });
+      });
+
+      let html = '<div class="bookshelf-unit">';
+      for(let estante in agrupados) {
+        html += `<div class="shelf-title">Repisa / Estante ${estante}</div>`;
+        html += `<div class="shelf-row">`;
+        
+        agrupados[estante].forEach((libroObj, idx) => {
+          const colorClass = colores[idx % colores.length];
+          const height = 130 + (idx % 4) * 12;
+          const width = 28 + (idx % 3) * 6;
+
+          html += `
+            <div class="book-spine ${colorClass}" 
+                 style="height: ${height}px; width: ${width}px;"
+                 title="${libroObj.nombre}"
+                 onclick="mostrarTarjetaLibro(${libroObj.pos})">
+              ${libroObj.nombre}
+            </div>
+          `;
+        });
+        
+        html += `</div>`;
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function mostrarTarjetaLibro(indexLibro) {
+      const libro = librosFiltradosActuales[indexLibro];
+      if(!libro) return;
+
+      libroSeleccionadoParaPrestamo = libro.nombre;
+      
+      document.getElementById('detNombre').innerText = libro.nombre || 'Sin título';
+      document.getElementById('detCodigo').innerText = (libro.codigo && String(libro.codigo).trim() !== '') ? libro.codigo : 'Sin código asignado';
+      document.getElementById('detEstante').innerText = 'Estante ' + libro.estante;
+
+      document.getElementById('modalDetalle').classList.add('show');
+    }
+
+    function cerrarTarjeta() {
+      document.getElementById('modalDetalle').classList.remove('show');
+    }
+
+    function solicitarDesdeTarjeta() {
+      cerrarTarjeta();
+      if(libroSeleccionadoParaPrestamo) {
+        document.getElementById('selectLibro').value = libroSeleccionadoParaPrestamo;
+      }
+      togglePanel(true);
+    }
+
+    function aplicarFiltros() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const estanteSel = document.getElementById('selectFiltroEstante').value;
+
+      librosFiltradosActuales = todosLosLibros.filter(l => {
+        const coincideTexto = String(l.nombre).toLowerCase().includes(q) || String(l.codigo).toLowerCase().includes(q);
+        const coincideEstante = (estanteSel === 'todos') || (String(l.estante) === String(estanteSel));
+        return coincideTexto && coincideEstante;
+      });
+
+      dibujarEstantes(librosFiltradosActuales);
+    }
+
+    function togglePanel(abrir) {
+      const panel = document.getElementById('sidePanel');
+      const overlay = document.getElementById('overlay');
+      
+      if(abrir === undefined) {
+        panel.classList.toggle('open');
+        overlay.classList.toggle('show');
+      } else if(abrir) {
+        panel.classList.add('open');
+        overlay.classList.add('show');
+      } else {
+        panel.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    }
+
+    function enviarSolicitudMailto(e) {
+      e.preventDefault();
+      const libro = document.getElementById('selectLibro').value;
+      const trabajador = document.getElementById('fNombre').value;
+      const correo = document.getElementById('fCorreo').value;
+      const area = document.getElementById('fArea').value;
+      const dias = document.getElementById('fDias').value;
+
+      const asunto = encodeURIComponent(`Solicitud de Préstamo de Libro: ${libro}`);
+      const cuerpo = encodeURIComponent(`Estimado/a,\n\nSe solicita el préstamo del siguiente libro desde la Biblioteca Virtual:\n\n- Libro: ${libro}\n- Trabajador: ${trabajador}\n- Correo: ${correo}\n- Área: ${area}\n- Días requeridos: ${dias} días\n\nSaludos.`);
+
+      window.location.href = `mailto:rquispe@sineace.gob.pe?subject=${asunto}&body=${cuerpo}`;
+      
+      const statusMsg = document.getElementById('statusMsg');
+      statusMsg.style.color = '#166534';
+      statusMsg.innerText = '¡✅ Abriendo tu correo para enviar el mensaje!';
+    }
+  </script>
+</body>
+</html>
