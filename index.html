@@ -644,23 +644,37 @@
           const libros = [];
           rows.forEach((row, index) => {
             const c = row.c;
-            if (!c || !c[0] || c[0].v === null) return;
+            if (!c) return;
 
-            const valCol0 = String(c[0].v).trim();
+            // MAPEO DE COLUMNAS DE GOOGLE SHEETS:
+            // c[0] = Columna A (N° correlativo -> se ignora)
+            // c[1] = Columna B (Nombre / Título del Libro)
+            // c[2] = Columna C (Código / Clasificación)
+            // c[3] = Columna D (Estante / Repisa)
             
-            if (index === 0 && (
-              valCol0.toLowerCase().includes('título') || 
-              valCol0.toLowerCase().includes('titulo') || 
-              valCol0.toLowerCase().includes('nombre') || 
-              valCol0.toLowerCase().includes('libro')
-            )) {
+            const valNombre = (c[1] && c[1].v !== null) ? String(c[1].v).trim() : '';
+            const valCodigo = (c[2] && c[2].v !== null) ? String(c[2].v).trim() : '';
+            
+            let valEstante = '1';
+            if (c[3] && c[3].v !== null) {
+              valEstante = String(c[3].v).trim();
+            } else if (c[2] && c[2].v !== null && !isNaN(c[2].v)) {
+              valEstante = String(c[2].v).trim();
+            }
+
+            // Ignorar encabezados
+            if (!valNombre || 
+                valNombre.toLowerCase() === 'nombre' || 
+                valNombre.toLowerCase() === 'título' || 
+                valNombre.toLowerCase() === 'titulo' ||
+                valNombre.toLowerCase() === 'n°') {
               return;
             }
 
             libros.push({
-              nombre: valCol0,
-              codigo: (c[1] && c[1].v !== null) ? String(c[1].v) : '',
-              estante: (c[2] && c[2].v !== null) ? String(c[2].v) : '1'
+              nombre: valNombre,
+              codigo: valCodigo,
+              estante: valEstante
             });
           });
 
@@ -669,7 +683,7 @@
         .catch(err => {
           console.error(err);
           document.getElementById('bookshelfContainer').innerHTML = 
-            '<p style="text-align:center; color:#991b1b; padding:20px; font-weight:bold;">Error al conectar con Google Sheets.<br>Asegúrate de que la hoja esté compartida como "Cualquier persona con el enlace (Lector)".</p>';
+            '<p style="text-align:center; color:#991b1b; padding:20px; font-weight:bold;">Error al cargar datos desde Google Sheets.<br>Asegúrate de que la hoja esté compartida como "Cualquier persona con el enlace (Lector)".</p>';
         });
     }
 
