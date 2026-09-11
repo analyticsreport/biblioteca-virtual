@@ -1007,7 +1007,7 @@
       }
     }
 
-    // ENVÍO DIRECTO VÍA API DE WEB3FORMS
+    // ENVÍO DIRECTO VÍA API DE WEB3FORMS CON ESTRUCTURA ORDENADA Y NUMERADA
     function enviarSolicitudDirecta(e) {
       e.preventDefault();
       
@@ -1032,14 +1032,14 @@
           },
           body: JSON.stringify({
               access_key: "ed14d59d-692a-4d02-8de6-4f5c01d3d0d3",
-              subject: `📌 Nueva Solicitud de Préstamo de Libro: ${libro}`,
-              from_name: trabajador,
+              subject: `📚 Solicitud de Préstamo: ${libro}`,
+              from_name: `${trabajador} [${area}]`,
               replyto: correo,
-              "Título del Libro": libro,
-              "Nombres y Apellidos del Trabajador": trabajador,
-              "Correo Institucional": correo,
-              "Área / Dirección": area,
-              "Días Solicitados": dias + " días"
+              "1️⃣ TÍTULO DEL LIBRO": libro,
+              "2️⃣ TRABAJADOR / SOLICITANTE": trabajador,
+              "3️⃣ CORREO INSTITUCIONAL": correo,
+              "4️⃣ ÁREA / DIRECCIÓN": area,
+              "5️⃣ TIEMPO SOLICITADO": `${dias} días calendario`
           })
       })
       .then(res => res.json())
