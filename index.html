@@ -283,7 +283,7 @@
     .c4 { background: #d97706; color: #ffffff; }
     .c5 { background: #6b21a8; }
 
-    /* VISTA INDICE */
+    /* VISTA ÍNDICE */
     .index-shelf-group {
       background: #ffffff;
       border-radius: 12px;
@@ -344,7 +344,7 @@
       background: var(--sineace-dark-blue);
     }
 
-    /* TARJETA DETALLE */
+    /* TARJETA DETALLE MODAL */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -764,7 +764,7 @@
           const rows = json.table.rows;
 
           const libros = [];
-          rows.forEach((row, index) => {
+          rows.forEach((row) => {
             const c = row.c;
             if (!c) return;
 
@@ -1007,7 +1007,7 @@
       }
     }
 
-    // ENVÍO DIRECTO SIN ABRIR PROGRAMA DE CORREO
+    // ENVÍO DIRECTO EN SEGUNDO PLANO VÍA AJAX
     function enviarSolicitudDirecta(e) {
       e.preventDefault();
       
@@ -1031,15 +1031,21 @@
               'Accept': 'application/json'
           },
           body: JSON.stringify({
-              _subject: `Solicitud de Libro: ${libro}`,
-              Libro_Solicitado: libro,
-              Trabajador: trabajador,
-              Correo_Institucional: correo,
-              Area_o_Direccion: area,
-              Dias_Requeridos: dias + " días"
+              _subject: `📌 Nueva Solicitud de Préstamo de Libro: ${libro}`,
+              _template: "table",
+              _captcha: "false",
+              _replyto: correo,
+              "Título del Libro": libro,
+              "Nombres y Apellidos del Trabajador": trabajador,
+              "Correo Institucional": correo,
+              "Área / Dirección": area,
+              "Días Solicitados": dias + " días"
           })
       })
-      .then(response => response.json())
+      .then(response => {
+          if (!response.ok) throw new Error("Error en la respuesta del servidor");
+          return response.json();
+      })
       .then(data => {
           btn.innerText = "📤 Enviar Solicitud Directa";
           btn.disabled = false;
@@ -1051,7 +1057,7 @@
           btn.innerText = "📤 Enviar Solicitud Directa";
           btn.disabled = false;
           statusMsg.style.color = '#991b1b';
-          statusMsg.innerText = '❌ Error al enviar. Por favor vuelve a intentarlo.';
+          statusMsg.innerText = '❌ Error al enviar. Si es la primera prueba, revisa tu correo rquispe@sineace.gob.pe para ACTIVAR el servicio.';
       });
     }
   </script>
