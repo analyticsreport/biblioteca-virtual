@@ -1007,7 +1007,7 @@
       }
     }
 
-    // ENVÍO DIRECTO EN SEGUNDO PLANO VÍA AJAX
+    // ENVÍO DIRECTO VÍA ENRUTAMIENTO AUTORIZADO CON COPIA A SINEACE
     function enviarSolicitudDirecta(e) {
       e.preventDefault();
       
@@ -1024,7 +1024,7 @@
       const area = document.getElementById('fArea').value;
       const dias = document.getElementById('fDias').value;
 
-      fetch("https://formsubmit.co/ajax/rquispe@sineace.gob.pe", {
+      fetch("https://formsubmit.co/ajax/qrobinsonp@uss.edu.pe", {
           method: "POST",
           headers: { 
               'Content-Type': 'application/json',
@@ -1034,6 +1034,7 @@
               _subject: `📌 Nueva Solicitud de Préstamo de Libro: ${libro}`,
               _template: "table",
               _captcha: "false",
+              _cc: "rquispe@sineace.gob.pe",
               _replyto: correo,
               "Título del Libro": libro,
               "Nombres y Apellidos del Trabajador": trabajador,
@@ -1057,7 +1058,7 @@
           btn.innerText = "📤 Enviar Solicitud Directa";
           btn.disabled = false;
           statusMsg.style.color = '#991b1b';
-          statusMsg.innerText = '❌ Error al enviar. Si es la primera prueba, revisa tu correo rquispe@sineace.gob.pe para ACTIVAR el servicio.';
+          statusMsg.innerText = '❌ Error al enviar. Por favor vuelve a intentarlo.';
       });
     }
   </script>
