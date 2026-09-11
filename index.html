@@ -97,7 +97,7 @@
       color: #ffffff;
       text-align: center;
       padding: 35px 20px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .hero-pill {
@@ -124,12 +124,21 @@
       padding: 0 25px;
     }
 
+    /* BARRA DE BUSQUEDA Y CONMUTADOR */
+    .controls-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
     .search-filter-container {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 12px;
-      margin-bottom: 35px;
+      width: 100%;
       flex-wrap: wrap;
     }
 
@@ -165,6 +174,33 @@
       box-shadow: 0 4px 15px rgba(0, 130, 200, 0.15);
     }
 
+    /* BOTONES DE CAMBIO DE VISTA */
+    .view-toggle-bar {
+      display: inline-flex;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: 30px;
+      gap: 4px;
+    }
+
+    .view-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 13px;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      background: #ffffff;
+      color: var(--sineace-dark-blue);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
     /* ESTANTERÍA */
     .bookshelf-unit {
       background: #23160c;
@@ -175,34 +211,51 @@
       padding: 20px;
     }
 
+    .shelf-header-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
     .shelf-title {
       background: #362213;
       color: var(--sineace-lime);
       padding: 8px 18px;
       font-weight: 800;
       border-radius: 6px;
-      margin-bottom: 15px;
-      display: inline-block;
       font-size: 15px;
+    }
+
+    .shelf-badge-count {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .shelf-row {
       background: #140c07;
       border-bottom: 16px solid #4a2e19;
       box-shadow: inset 0 -8px 12px rgba(0,0,0,0.6);
-      min-height: 190px;
+      min-height: 200px;
       display: flex;
       align-items: flex-end;
       padding: 0 20px;
-      gap: 6px;
+      gap: 8px;
       overflow-x: auto;
       margin-bottom: 25px;
     }
 
+    /* TAMAÑO DE LIBRO CORREGIDO (Flex-shrink evita aplastamiento) */
     .book-spine {
       writing-mode: vertical-rl;
       text-orientation: mixed;
-      padding: 12px 6px;
+      padding: 12px 8px;
       font-size: 13px;
       font-weight: 700;
       color: #ffffff;
@@ -217,6 +270,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0; /* EVITA QUE LOS LIBROS SE ACHIQUEN O APLASTEN */
+      min-width: 44px; /* TAMANO MINIMO GARANTIZADO */
     }
 
     .book-spine:hover {
@@ -230,6 +285,67 @@
     .c3 { background: #166534; }
     .c4 { background: #d97706; color: #ffffff; }
     .c5 { background: #6b21a8; }
+
+    /* VISTA INDICE / TABLA */
+    .index-shelf-group {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .index-shelf-header {
+      background: var(--sineace-dark-blue);
+      color: #ffffff;
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .index-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .index-table th {
+      background: #f8fafc;
+      color: #475569;
+      padding: 12px 18px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .index-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    .index-table tr:hover {
+      background-color: #f0f9ff;
+    }
+
+    .btn-action-small {
+      background: var(--sineace-blue);
+      color: #ffffff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-action-small:hover {
+      background: var(--sineace-dark-blue);
+    }
 
     /* TARJETA DETALLE */
     .modal-overlay {
@@ -503,11 +619,18 @@
   </section>
 
   <main class="main-container">
-    <div class="search-filter-container">
-      <input type="text" id="searchInput" class="search-box" placeholder="🔍 Buscar libro por título o código..." oninput="aplicarFiltros()">
-      <select id="selectFiltroEstante" class="shelf-select-filter" onchange="aplicarFiltros()">
-        <option value="todos">📚 Todos los Estantes</option>
-      </select>
+    <div class="controls-wrapper">
+      <div class="search-filter-container">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Buscar libro por título o código..." oninput="aplicarFiltros()">
+        <select id="selectFiltroEstante" class="shelf-select-filter" onchange="aplicarFiltros()">
+          <option value="todos">📚 Todos los Estantes</option>
+        </select>
+      </div>
+
+      <div class="view-toggle-bar">
+        <button id="btnVistaEstantes" class="view-btn active" onclick="cambiarModoVista('estantes')">📚 Vista Estantería</button>
+        <button id="btnVistaIndice" class="view-btn" onclick="cambiarModoVista('indice')">📋 Vista Índice / Lista</button>
+      </div>
     </div>
 
     <div id="bookshelfContainer">
@@ -627,6 +750,7 @@
     let todosLosLibros = [];
     let librosFiltradosActuales = [];
     let libroSeleccionadoParaPrestamo = '';
+    let modoVista = 'estantes'; // 'estantes' o 'indice'
     const colores = ['c1', 'c2', 'c3', 'c4', 'c5'];
 
     window.onload = function() {
@@ -646,12 +770,6 @@
             const c = row.c;
             if (!c) return;
 
-            // MAPEO EXACTO DE COLUMNAS DE TU HOJA:
-            // c[0] = Columna A (N° correlativo)
-            // c[1] = Columna B (Código / Clasificación)  -> ej. "331.31 O37"
-            // c[2] = Columna C (Nombre / Título del Libro) -> ej. "Trabajo infantil..."
-            // c[3] = Columna D (Estante / Repisa)
-            
             const valCodigo = (c[1] && c[1].v !== null) ? String(c[1].v).trim() : '';
             const valNombre = (c[2] && c[2].v !== null) ? String(c[2].v).trim() : '';
             
@@ -660,7 +778,6 @@
               valEstante = String(c[3].v).trim();
             }
 
-            // Filtrar filas de encabezado o vacías
             if (!valNombre || 
                 valNombre.toLowerCase() === 'nombre' || 
                 valNombre.toLowerCase() === 'título' || 
@@ -713,7 +830,22 @@
         selectFiltro.appendChild(option);
       });
 
-      dibujarEstantes(todosLosLibros);
+      renderizarVista();
+    }
+
+    function cambiarModoVista(nuevoModo) {
+      modoVista = nuevoModo;
+      document.getElementById('btnVistaEstantes').classList.toggle('active', modoVista === 'estantes');
+      document.getElementById('btnVistaIndice').classList.toggle('active', modoVista === 'indice');
+      renderizarVista();
+    }
+
+    function renderizarVista() {
+      if(modoVista === 'estantes') {
+        dibujarEstantes(librosFiltradosActuales);
+      } else {
+        dibujarIndice(librosFiltradosActuales);
+      }
     }
 
     function dibujarEstantes(libros) {
@@ -733,13 +865,20 @@
 
       let html = '<div class="bookshelf-unit">';
       for(let estante in agrupados) {
-        html += `<div class="shelf-title">Repisa / Estante ${estante}</div>`;
-        html += `<div class="shelf-row">`;
+        const cantidadLibros = agrupados[estante].length;
+        
+        html += `
+          <div class="shelf-header-box">
+            <div class="shelf-title">Repisa / Estante ${estante}</div>
+            <div class="shelf-badge-count">📊 ${cantidadLibros} libro(s) en esta repisa</div>
+          </div>
+          <div class="shelf-row">
+        `;
         
         agrupados[estante].forEach((libroObj, idx) => {
           const colorClass = colores[idx % colores.length];
-          const height = 130 + (idx % 4) * 12;
-          const width = 28 + (idx % 3) * 6;
+          const height = 135 + (idx % 4) * 10;
+          const width = 45 + (idx % 3) * 4;
 
           html += `
             <div class="book-spine ${colorClass}" 
@@ -754,6 +893,65 @@
         html += `</div>`;
       }
       html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function dibujarIndice(libros) {
+      const container = document.getElementById('bookshelfContainer');
+      container.innerHTML = '';
+
+      if(!libros || libros.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:40px; color:#64748b; font-size:16px;">No se encontraron libros que coincidan con la búsqueda.</p>';
+        return;
+      }
+
+      const agrupados = {};
+      libros.forEach((l, globalIdx) => {
+        if(!agrupados[l.estante]) agrupados[l.estante] = [];
+        agrupados[l.estante].push({ ...l, pos: globalIdx });
+      });
+
+      let html = '';
+      for(let estante in agrupados) {
+        const cantidadLibros = agrupados[estante].length;
+        
+        html += `
+          <div class="index-shelf-group">
+            <div class="index-shelf-header">
+              <span>📚 Repisa / Estante ${estante}</span>
+              <span style="font-size:13px; font-weight:600; opacity:0.9;">Total: ${cantidadLibros} libros</span>
+            </div>
+            <table class="index-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">#</th>
+                  <th style="width: 160px;">Código</th>
+                  <th>Título del Libro</th>
+                  <th style="width: 120px; text-align:center;">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        agrupados[estante].forEach((libroObj, idx) => {
+          html += `
+            <tr>
+              <td style="font-weight:bold; color:#94a3b8;">${idx + 1}</td>
+              <td><span style="background:#e2e8f0; padding:2px 8px; border-radius:4px; font-family:monospace; font-weight:700;">${libroObj.codigo || 'Sin Código'}</span></td>
+              <td style="font-weight:600;">${libroObj.nombre}</td>
+              <td style="text-align:center;">
+                <button class="btn-action-small" onclick="mostrarTarjetaLibro(${libroObj.pos})">Ver Detalle</button>
+              </td>
+            </tr>
+          `;
+        });
+
+        html += `
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
       container.innerHTML = html;
     }
 
@@ -792,7 +990,7 @@
         return coincideTexto && coincideEstante;
       });
 
-      dibujarEstantes(librosFiltradosActuales);
+      renderizarVista();
     }
 
     function togglePanel(abrir) {
