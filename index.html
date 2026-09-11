@@ -1007,7 +1007,7 @@
       }
     }
 
-    // ENVÍO DIRECTO VÍA ENRUTAMIENTO AUTORIZADO CON COPIA A SINEACE
+    // ENVÍO DIRECTO VÍA API DE WEB3FORMS
     function enviarSolicitudDirecta(e) {
       e.preventDefault();
       
@@ -1024,18 +1024,17 @@
       const area = document.getElementById('fArea').value;
       const dias = document.getElementById('fDias').value;
 
-      fetch("https://formsubmit.co/ajax/qrobinsonp@uss.edu.pe", {
+      fetch("https://api.web3forms.com/submit", {
           method: "POST",
           headers: { 
               'Content-Type': 'application/json',
               'Accept': 'application/json'
           },
           body: JSON.stringify({
-              _subject: `📌 Nueva Solicitud de Préstamo de Libro: ${libro}`,
-              _template: "table",
-              _captcha: "false",
-              _cc: "rquispe@sineace.gob.pe",
-              _replyto: correo,
+              access_key: "ed14d59d-692a-4d02-8de6-4f5c01d3d0d3",
+              subject: `📌 Nueva Solicitud de Préstamo de Libro: ${libro}`,
+              from_name: trabajador,
+              replyto: correo,
               "Título del Libro": libro,
               "Nombres y Apellidos del Trabajador": trabajador,
               "Correo Institucional": correo,
@@ -1043,16 +1042,17 @@
               "Días Solicitados": dias + " días"
           })
       })
-      .then(response => {
-          if (!response.ok) throw new Error("Error en la respuesta del servidor");
-          return response.json();
-      })
+      .then(res => res.json())
       .then(data => {
           btn.innerText = "📤 Enviar Solicitud Directa";
           btn.disabled = false;
-          statusMsg.style.color = '#166534';
-          statusMsg.innerText = '¡✅ Solicitud enviada con éxito!';
-          document.getElementById('loanForm').reset();
+          if (data.success) {
+            statusMsg.style.color = '#166534';
+            statusMsg.innerText = '¡✅ Solicitud enviada con éxito!';
+            document.getElementById('loanForm').reset();
+          } else {
+            throw new Error(data.message || "Error al enviar");
+          }
       })
       .catch(error => {
           btn.innerText = "📤 Enviar Solicitud Directa";
