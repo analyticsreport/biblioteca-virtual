@@ -124,7 +124,6 @@
       padding: 0 25px;
     }
 
-    /* BARRA DE BUSQUEDA Y CONMUTADOR */
     .controls-wrapper {
       display: flex;
       flex-direction: column;
@@ -174,7 +173,6 @@
       box-shadow: 0 4px 15px rgba(0, 130, 200, 0.15);
     }
 
-    /* BOTONES DE CAMBIO DE VISTA */
     .view-toggle-bar {
       display: inline-flex;
       background: #e2e8f0;
@@ -251,7 +249,6 @@
       margin-bottom: 25px;
     }
 
-    /* TAMAÑO DE LIBRO CORREGIDO (Flex-shrink evita aplastamiento) */
     .book-spine {
       writing-mode: vertical-rl;
       text-orientation: mixed;
@@ -270,8 +267,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0; /* EVITA QUE LOS LIBROS SE ACHIQUEN O APLASTEN */
-      min-width: 44px; /* TAMANO MINIMO GARANTIZADO */
+      flex-shrink: 0;
+      min-width: 44px;
     }
 
     .book-spine:hover {
@@ -286,7 +283,7 @@
     .c4 { background: #d97706; color: #ffffff; }
     .c5 { background: #6b21a8; }
 
-    /* VISTA INDICE / TABLA */
+    /* VISTA INDICE */
     .index-shelf-group {
       background: #ffffff;
       border-radius: 12px;
@@ -543,6 +540,7 @@
     }
 
     .btn-submit:hover { background: var(--sineace-dark-blue); }
+    .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
 
     .overlay {
       position: fixed;
@@ -680,7 +678,7 @@
     </div>
 
     <div class="panel-body">
-      <form id="loanForm" onsubmit="enviarSolicitudMailto(event)">
+      <form id="loanForm" onsubmit="enviarSolicitudDirecta(event)">
         <div class="form-group">
           <label>Selecciona el Libro *</label>
           <select id="selectLibro" required>
@@ -713,10 +711,10 @@
           </select>
         </div>
 
-        <button type="submit" class="btn-submit" id="btnSubmit">📤 Generar Solicitud de Correo</button>
+        <button type="submit" class="btn-submit" id="btnSubmit">📤 Enviar Solicitud Directa</button>
       </form>
 
-      <div id="statusMsg" style="text-align:center; margin-top: 15px; font-weight: 700;"></div>
+      <div id="statusMsg" style="text-align:center; margin-top: 15px; font-weight: 700; font-size: 14px;"></div>
     </div>
   </aside>
 
@@ -750,7 +748,7 @@
     let todosLosLibros = [];
     let librosFiltradosActuales = [];
     let libroSeleccionadoParaPrestamo = '';
-    let modoVista = 'estantes'; // 'estantes' o 'indice'
+    let modoVista = 'estantes';
     const colores = ['c1', 'c2', 'c3', 'c4', 'c5'];
 
     window.onload = function() {
@@ -1009,22 +1007,52 @@
       }
     }
 
-    function enviarSolicitudMailto(e) {
+    // ENVÍO DIRECTO SIN ABRIR PROGRAMA DE CORREO
+    function enviarSolicitudDirecta(e) {
       e.preventDefault();
+      
+      const btn = document.getElementById('btnSubmit');
+      const statusMsg = document.getElementById('statusMsg');
+
+      btn.innerText = "⏳ Enviando solicitud...";
+      btn.disabled = true;
+      statusMsg.innerText = "";
+
       const libro = document.getElementById('selectLibro').value;
       const trabajador = document.getElementById('fNombre').value;
       const correo = document.getElementById('fCorreo').value;
       const area = document.getElementById('fArea').value;
       const dias = document.getElementById('fDias').value;
 
-      const asunto = encodeURIComponent(`Solicitud de Préstamo de Libro: ${libro}`);
-      const cuerpo = encodeURIComponent(`Estimado/a,\n\nSe solicita el préstamo del siguiente libro desde la Biblioteca Virtual:\n\n- Libro: ${libro}\n- Trabajador: ${trabajador}\n- Correo: ${correo}\n- Área: ${area}\n- Días requeridos: ${dias} días\n\nSaludos.`);
-
-      window.location.href = `mailto:rquispe@sineace.gob.pe?subject=${asunto}&body=${cuerpo}`;
-      
-      const statusMsg = document.getElementById('statusMsg');
-      statusMsg.style.color = '#166534';
-      statusMsg.innerText = '¡✅ Abriendo tu correo para enviar el mensaje!';
+      fetch("https://formsubmit.co/ajax/rquispe@sineace.gob.pe", {
+          method: "POST",
+          headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+              _subject: `Solicitud de Libro: ${libro}`,
+              Libro_Solicitado: libro,
+              Trabajador: trabajador,
+              Correo_Institucional: correo,
+              Area_o_Direccion: area,
+              Dias_Requeridos: dias + " días"
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          btn.innerText = "📤 Enviar Solicitud Directa";
+          btn.disabled = false;
+          statusMsg.style.color = '#166534';
+          statusMsg.innerText = '¡✅ Solicitud enviada con éxito!';
+          document.getElementById('loanForm').reset();
+      })
+      .catch(error => {
+          btn.innerText = "📤 Enviar Solicitud Directa";
+          btn.disabled = false;
+          statusMsg.style.color = '#991b1b';
+          statusMsg.innerText = '❌ Error al enviar. Por favor vuelve a intentarlo.';
+      });
     }
   </script>
 </body>
